@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico"/>
+
+    <title>VTEX Product Finder</title>
+
+    <!-- Bootstrap core CSS -->
+
+
+    
+	<script src="../js/jquery-3.4.1.min.js" th:href="@{/js/jquery-3.4.1.min.js}"></script>
+	<script src="../js/bootstrap.js" th:href="@{/js/bootstrap.js}"></script>
+	<link href="../css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
+	
+<!-- 	<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> -->
+<!-- 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet"> -->
+
+	<script type="text/javascript">  
+    
+		function procesar(clientName){
+			$("#"+clientName+"ButtonProc").hide();
+			$("#"+clientName+"ButtonProc2").show();
+	        var urlDetalle = "/"+clientName+"/procesar";	
+	        $.getJSON(urlDetalle, function (data) {
+				var cantCategorias = data.cantCategorias;
+				$("#"+clientName+"Fecha").text(data.fechaUltimaActualizacion);
+				$("#"+clientName+"CantProductos").text(data.cantProductos);
+				$("#"+clientName+"CantImagenes").text(data.cantImagenes);
+				$("#"+clientName+"ButtonProc2").hide();
+				$("#"+clientName+"ButtonProc").show();
+			});		
+		}
+	
+		function borrar(clientName){
+			$("#"+clientName+"ButtonProc").hide();
+			$("#"+clientName+"ButtonProc2").show();
+	        var urlDetalle = "/"+clientName+"/deleteAll";	
+	        $.getJSON(urlDetalle, function (data) {
+				var cantCategorias = data.cantCategorias;
+				$("#"+clientName+"Fecha").text(data.fechaUltimaActualizacion);
+				$("#"+clientName+"CantProductos").text(data.cantProductos);
+				$("#"+clientName+"CantImagenes").text(data.cantImagenes);
+				$("#"+clientName+"ButtonProc2").hide();
+				$("#"+clientName+"ButtonProc").show();
+			});		
+		}
+	
+		
+	    $(function() { 
+		    $('#jumboProc').on('click', function() {
+		    	alert('in')
+				$("#jumboButtonProc").hide();
+				$("#jumboButtonProc2").show();
+		        var urlDetalle = "/jumbo/procesar";	
+		        $.getJSON(urlDetalle, function (data) {
+					var cantCategorias = data.cantCategorias;
+					$('#JumboFecha').text(data.fechaUltimaActualizacion);
+					$('#JumboCantProductos').text(data.cantProductos);
+					$('#JumboCantImagenes').text(data.cantImagenes);
+					$("#JumboButtonProc2").hide();
+					$("#JumboButtonProc").show();
+				});
+		    });
+	    });  
+// 	    $(function() { 
+// 		    $('#walmartProc').on('click', function() {
+// 		        var $this = $(this);
+// 		        $this.button('loading');
+// 		        var urlDetalle = "/walmart/procesar";	
+// 		        $.getJSON(urlDetalle, function (data) {
+// 					var cantCategorias = data.cantCategorias;
+// 					$('#walmartFecha').text(data.fechaUltimaActualizacion);
+// 					$('#walmartCantProductos').text(data.cantProductos);
+// 					$('#walmartCantImagenes').text(data.cantImagenes);
+// 					$this.button('reset');
+// 				});
+// 		    });
+// 	    });  
+
+		$( document ).ready(function() {
+			var urlDetalle = "/datosClientes";	
+	        $.getJSON(urlDetalle, function (data) {
+			    var table = $('#tablaBody');
+			    table.find("tbody tr").remove();
+			    data.forEach(function (cliente) {
+			        table.append("<tr> <th scope='row' style='font-size: 21px;'>" + cliente.cliente + "</th><td><p id='" + cliente.cliente + " Fecha'" 
+			        + cliente.fechaEjecucion + "</td><td id='"+cliente.cliente+"CantProductos'>" + cliente.cantProductos + "</td><td id='"+cliente.cliente+"CantImagenes'>" + cliente.cantImagenes + "</td> " + 
+			        " <td> <div id='"+cliente.cliente+"ButtonProc'> <button type='button' class='btn btn-primary' id='"+cliente.cliente+"Proc' onclick=procesar('"+cliente.cliente+"');>Procesar</button>" +
+			        " <button type='button' class='btn btn-primary' id='"+cliente.cliente+"Borrar' onclick=borrar('"+cliente.cliente+"');>Borrar</button> </div> "+
+					" <div id='"+cliente.cliente+"ButtonProc2' style='display:none;'> <button class='btn btn-primary' type='button' disabled> " +
+					" &nbsp;&nbsp;&nbsp;&nbsp; <span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span> " +
+					" &nbsp;&nbsp;&nbsp;&nbsp; </button> </div> " +
+					" </td> </tr>");
+			    });
+	        });
+		});
+		
+	</script>
+</head>
+<body style=" background-color: lightblue;">
+
+<div class="container">
+    <!-- Static navbar -->
+	<BR/>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light" style="border-radius:5px;">
+
+	  <div class="collapse navbar-collapse" id="navbarText">
+	    <ul class="navbar-nav mr-auto">
+	      <li class="nav-item active">
+	        <a class="nav-link" href="#">HOME <span class="sr-only">(current)</span></a>
+	      </li>
+	      <li class="nav-item">
+	        <a class="nav-link" href="#">Imagenes</a>
+	      </li>
+	      <li class="nav-item">
+	        <a class="nav-link" href="#">API Rest</a>
+	      </li>
+	    </ul>
+	    <span class="navbar-text">
+	      <a class="nav-link" href="#">Ayuda</a>
+	    </span>
+	  </div>
+	</nav>
+	<BR/>
+    <!-- Main component for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container">
+		  <h1 align="center">Libertad VTEX Panel</h1>
+		  <br/>
+		  <table class="table" id="tablaPrincipal">
+		   <thead>
+		    <tr>
+		     <th scope="col">eCommerce</th>
+		     <th scope="col">Ultima ejecucion</th>
+		     <th scope="col">Productos Procesados</th>
+		     <th scope="col">Imagenes Procesadas</th>
+		     <th scope="col">Acciones</th>
+		    </tr>
+		   </thead>
+		   <tbody id="tablaBody">
+			    <tr>
+			     <th scope="row" style="font-size: 21px;">Jumbo</th>
+			     <td> <p id="jumboFecha" /></td>
+			     <td> <p id="jumboCantProductos" /></td>
+			     <td> <p id="jumboCantImagenes" /></td>
+<!-- 			     <td> -->
+<!-- 			     	 <div id="jumboButtonProc3"> -->
+<!-- 				     	<button type="button" class="btn btn-primary" id="jumboProc222">Procesar</button> -->
+<!-- 				     	<button type="button" class="btn btn-primary" id="jumboBorrar" onclick="procesar('Jumbo');">Borrar</button> -->
+<!-- 				     </div> -->
+<!-- 				     <div id="jumboButtonProc4" style="display:none;"> -->
+<!-- 					     <button class="btn btn-primary" type="button" disabled> -->
+<!-- 					     		&nbsp;&nbsp;&nbsp;&nbsp; -->
+<!-- 							  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> -->
+<!-- 								&nbsp;&nbsp;&nbsp;&nbsp; -->
+<!-- 						</button> -->
+						
+<!-- 					</div> -->
+<!-- 			     </td> -->
+			    </tr>
+		   </tbody>
+		  </table>
+		 </div>
+    </div>
+</div> <!-- /container -->
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<!--     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+
+
+
+</body>
+</html>
